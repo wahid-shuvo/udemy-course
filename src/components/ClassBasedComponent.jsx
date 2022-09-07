@@ -2,73 +2,35 @@ import React, { Component } from 'react';
 
 
 class ClassBasedComponent extends Component {
+  state={
+    data:[]
+  }
+  componentDidMount() {
+    this.getData()
+  }
+  getData=async ()=>{
+    const response=await fetch('https://jsonplaceholder.typicode.com/posts');
+    const data=await response.json();
+    if(data && data.length){
+      this.setState({
+        data
+      })
+    }
 
-  state = {
-    formData: {
-      name: '',
-      age: 0,
-    },
-    finalFormData:{}
-  };
+  }
 
-  handleNameChange = (event) => {
-    const { value } = event.target;
-    this.setState(prevState=>({
-      formData:{
-        ...prevState.formData,
-        name:value
-      }
-    }))
-  };
-
-  handleAgeChange = (event) => {
-    const { value } = event.target;
-    this.setState(prevState=>({
-      formData:{
-        ...prevState.formData,
-        age:value
-      }
-    }))
-  };
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const  {formData}=this.state
-    this.setState(prevState=>({
-      ...prevState,
-      finalFormData:{
-        ...prevState.finalFormData,
-        ...formData
-
-      },
-      formData: {
-        name: '',
-        age: 0,
-      }
-    }))
-  };
-
-  render() {
+  render(){
     console.log(this.state)
-    return (
+    return(
       <div>
-        <form onSubmit={this.handleSubmit}>
-          <input name={'name'} placeholder={'name'} type={'text'} value={this.state.formData.name}
-                 onChange={this.handleNameChange} />
-          <input name={'age'} placeholder={'age'} type={'number'} value={this.state.formData.age}
-                 onChange={this.handleAgeChange} />
-          <button type={'submit'} aria-label={'submit'}>Submit</button>
-        </form>
         {
-          this.state.finalFormData && Object.keys(this.state.finalFormData).length>0 &&(
-            <p>
-              Final data is: {this.state.finalFormData.name} and {" "}{this.state.finalFormData.age}
-            </p>
-          )
+          this.state.data && this.state.data.length>0 ?this.state.data.map((dataItem,index)=>(
+            <p key={`${dataItem.id}${index}`}>{dataItem.title}</p>
+          )):null
         }
-
       </div>
     );
   }
+
 };
 export default ClassBasedComponent;
