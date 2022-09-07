@@ -2,26 +2,73 @@ import React, { Component } from 'react';
 
 
 class ClassBasedComponent extends Component {
-  state={
-    //write all state properties inside of this
-    count:0 //initial value of count
-  }
-  handleClick=()=>{
-    const {count}=this.state;
-    this.setState({
-      count: count+1
-    },()=>{
-      console.log(this.state)
-    })
-  }
+
+  state = {
+    formData: {
+      name: '',
+      age: 0,
+    },
+    finalFormData:{}
+  };
+
+  handleNameChange = (event) => {
+    const { value } = event.target;
+    this.setState(prevState=>({
+      formData:{
+        ...prevState.formData,
+        name:value
+      }
+    }))
+  };
+
+  handleAgeChange = (event) => {
+    const { value } = event.target;
+    this.setState(prevState=>({
+      formData:{
+        ...prevState.formData,
+        age:value
+      }
+    }))
+  };
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const  {formData}=this.state
+    this.setState(prevState=>({
+      ...prevState,
+      finalFormData:{
+        ...prevState.finalFormData,
+        ...formData
+
+      },
+      formData: {
+        name: '',
+        age: 0,
+      }
+    }))
+  };
+
   render() {
     console.log(this.state)
-    return (<div>
-      <button onClick={this.handleClick}>Click</button>
-      {
-        this.state.count==5 && "count is 5"
-      }
-    </div>);
+    return (
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <input name={'name'} placeholder={'name'} type={'text'} value={this.state.formData.name}
+                 onChange={this.handleNameChange} />
+          <input name={'age'} placeholder={'age'} type={'number'} value={this.state.formData.age}
+                 onChange={this.handleAgeChange} />
+          <button type={'submit'} aria-label={'submit'}>Submit</button>
+        </form>
+        {
+          this.state.finalFormData && Object.keys(this.state.finalFormData).length>0 &&(
+            <p>
+              Final data is: {this.state.finalFormData.name} and {" "}{this.state.finalFormData.age}
+            </p>
+          )
+        }
+
+      </div>
+    );
   }
 };
 export default ClassBasedComponent;
