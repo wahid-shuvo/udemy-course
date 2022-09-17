@@ -4,34 +4,20 @@
 //usereducer
 //useref
 
-import React,{ useReducer } from 'react';
-
-const intialState = {
-  flag: false,
-};
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'TOGGLE_BUTTON':
-      return (
-        {
-          ...state,
-          flag:!state.flag
-        }
-
-      )
-    default:
-      return state;
-
-  }
-};
+import React, { useReducer, useRef } from 'react';
 
 function FunctionalBasedComponent() {
 
-  const [state, dispatch] = useReducer(reducer, intialState);
-  console.log(state)
+  const inputRef=useRef(null)
+  console.log(inputRef)
+
+  const handleFocus=()=>{
+    inputRef.current.focus()
+  }
   return (
     <div>
-      <button onClick={() => dispatch({ type: 'TOGGLE_BUTTON' })}>Toggle</button>
+        <input ref={inputRef} name={"name"} placeholder={"Name"} type={"text"}/>
+      <button onClick={handleFocus}>Click</button>
     </div>
   );
 
